@@ -50,7 +50,7 @@ uint32_t ADCData[4] = {0};
 uint32_t Time = 0;
 uint32_t TimeStamp = 0;
 volatile uint8_t  State = 0;
-uint32_t Random = 0;
+volatile uint32_t Random = 0;
 uint8_t test = 0;
 /* USER CODE END PV */
 
@@ -110,8 +110,8 @@ int main(void)
   while (1)
   {
 	/////////////////////////////////////////////////////////////////////////////////////////
-	  test = State;
-	if(test == 1)
+//	  test = State;
+	if(State == 1)
 	{
 		Random = 1000;//( 1000 + (22695477*ADCData[0]) + ADCData[1] ) % 10000;
 		/*State = 3;
@@ -127,6 +127,12 @@ int main(void)
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);*/
 
 	}
+
+	else
+	{
+		Random = 500;
+	}
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////
     /* USER CODE END WHILE */
