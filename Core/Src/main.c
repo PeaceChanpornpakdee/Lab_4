@@ -71,6 +71,9 @@ static void MX_ADC1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	uint32_t Time = 0;
+	uint32_t ButtonTimeStamp = 0;
+	GPIO_PinState SwitchState[2]; 	//Now, Previous
 
   /* USER CODE END 1 */
 
@@ -104,9 +107,15 @@ int main(void)
   while (1)
   {
 	/////////////////////////////////////////////////////////////////////////////////////////
+	  if(HAL_GetTick() - ButtonTimeStamp >= 100)
+	  {
+		  ButtonTimeStamp = HAL_GetTick();
 
+		  SwitchState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 
+	  }
 
+	  		  SwitchState[1] = SwitchState[0];
 
 
 
@@ -308,7 +317,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
