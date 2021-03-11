@@ -47,6 +47,11 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint32_t ADCData[4] = {0};
+uint32_t Time = 0;
+uint32_t TimeStamp = 0;
+volatile uint8_t  State = 0;
+uint32_t Random = 0;
+uint8_t test = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,9 +76,6 @@ static void MX_ADC1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint32_t Time = 0;
-	uint32_t ButtonTimeStamp = 0;
-	GPIO_PinState SwitchState[2]; 	//Now, Previous
 
   /* USER CODE END 1 */
 
@@ -100,6 +102,7 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   HAL_ADC_Start_DMA(&hadc1, ADCData, 4);
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,20 +110,23 @@ int main(void)
   while (1)
   {
 	/////////////////////////////////////////////////////////////////////////////////////////
-	  if(HAL_GetTick() - ButtonTimeStamp >= 100)
-	  {
-		  ButtonTimeStamp = HAL_GetTick();
+	  test = State;
+	if(test == 1)
+	{
+		Random = 1000;//( 1000 + (22695477*ADCData[0]) + ADCData[1] ) % 10000;
+		/*State = 3;
+		TimeStamp = HAL_GetTick();
+		while(HAL_GetTick() - TimeStamp <= Random )
+		{
+			//Do Nothing
+		}
+		TimeStamp = HAL_GetTick();
 
-		  SwitchState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
+		State = 2;
 
-	  }
+		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);*/
 
-	  		  SwitchState[1] = SwitchState[0];
-
-
-
-
-
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////
     /* USER CODE END WHILE */
@@ -335,14 +341,29 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//////////////////////////////////////////////////////////////////////////////////
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == GPIO_PIN_13)
 	{
-		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		if(State == 0)
+		{
+			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+			State = 1;
+		}
+
+		else
+		{
+			Time = HAL_GetTick() - TimeStamp;
+
+			State = 0;
+		}
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 /* USER CODE END 4 */
 
 /**
