@@ -112,27 +112,20 @@ int main(void)
 	/////////////////////////////////////////////////////////////////////////////////////////
 	if(State == 1)
 	{
-		Random = 1000;//( 1000 + (22695477*ADCData[0]) + ADCData[1] ) % 10000;
-		/*State = 3;
+		Time = 0;
+
+		Random = 1000 + ( (22695477*ADCData[0] + ADCData[1]) % 10000 );
+
 		TimeStamp = HAL_GetTick();
 		while(HAL_GetTick() - TimeStamp <= Random )
 		{
 			//Do Nothing
 		}
-		TimeStamp = HAL_GetTick();
 
 		State = 2;
-
-		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);*/
-
+		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+		TimeStamp = HAL_GetTick();
 	}
-
-	else
-	{
-		Random = 500;
-	}
-
-
 	/////////////////////////////////////////////////////////////////////////////////////////
     /* USER CODE END WHILE */
 
