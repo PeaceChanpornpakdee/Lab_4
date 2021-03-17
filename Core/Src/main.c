@@ -47,11 +47,11 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint32_t ADCData[4] = {0};
-uint32_t Time = 0;
-uint32_t TimeStamp = 0;
-volatile uint8_t  State = 0;
-volatile uint32_t Random = 0;
-uint8_t test = 0;
+uint32_t Time 		= 0;
+uint32_t TimeStamp 	= 0;
+uint8_t  State 		= 0;
+uint32_t Random 	= 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -110,7 +110,6 @@ int main(void)
   while (1)
   {
 	/////////////////////////////////////////////////////////////////////////////////////////
-//	  test = State;
 	if(State == 1)
 	{
 		Random = 1000;//( 1000 + (22695477*ADCData[0]) + ADCData[1] ) % 10000;
